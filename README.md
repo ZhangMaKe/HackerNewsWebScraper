@@ -30,7 +30,7 @@ A C# Console Application to scrape story data from the Hacker News website (http
 1) Make sure docker is running
 2) From command line/terminal run:
 ``` 
-docker image pull docker pull markfaiers/hackernewsscraper
+docker pull markfaiers/hackernewsscraper
 docker run markfaiers/hackernewsscraper n
 ```
 where n is the number of stories to get.
