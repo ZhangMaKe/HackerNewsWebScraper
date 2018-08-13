@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  hackernewswebscraper:
+    image: markfaiers/hackernewswebscraper
+    build:
+      context: .
+      dockerfile: HackerNewsWebScraper/Dockerfile

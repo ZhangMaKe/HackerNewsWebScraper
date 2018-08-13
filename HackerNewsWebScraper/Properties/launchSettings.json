@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "HackerNewsWebScraper": {
+      "commandName": "Project",
+      "commandLineArgs": "32"
+    }
+  }
+}
