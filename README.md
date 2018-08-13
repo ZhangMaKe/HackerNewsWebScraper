@@ -43,7 +43,7 @@ There is a 'TestPage.txt' file contained in the project, which contains html use
 
 ## Librarys Used
 
-* ScrapySharp - To simulate a web browser and traverse an html document.
+* ScrapySharp - To simulate a web browser and traverse an html document. (Not all features are compatible with dotnet core but there ones used in this application are.)
 * Newtonsoft.Json - To serialize objects to Json and create Json Arrays.
 * NUnit - For unit testing.
 
