@@ -14,6 +14,10 @@ A C# Console Application to scrape story data from the Hacker News website (http
 * Dotnet command line tools (https://docs.microsoft.com/en-us/dotnet/core/tools/?tabs=netcore2x)
 * Docker (https://docs.docker.com/install/)
 
+## Configuration 
+
+* Defaults used for items that fail validation are set in the 'appsettings.json' file.
+
 ## Running the app
 
 1) Open Solution in Visual Studio.
