@@ -18,7 +18,7 @@ A C# Console Application to scrape story data from the Hacker News website (http
 
 * Defaults used for items that fail validation are set in the 'appsettings.json' file.
 
-## Running the app
+## Running the App
 
 1) Open Solution in Visual Studio.
 2) Build the app (Right-Click on HackerNewsWebScraper -> Rebuild).
@@ -35,7 +35,7 @@ docker run markfaiers/hackernewsscraper n
 ```
 where n is the number of stories to get.
 
-## Run the tests
+## Run the Tests
 The respository contains a HackerNewsWebScraper.Tests project containing NUnit tests. 
 They can be run from Visual Studio by opening the TestExplorer and selecting 'Run All'.
 
