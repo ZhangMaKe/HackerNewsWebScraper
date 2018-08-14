@@ -9,21 +9,21 @@ namespace HackerNewsWebScraper
 {
     public class HackerNewsScraper : IHackerNewsScraper
     {
-        public List<HtmlNode> TitleNodes { get; set; }
-        public List<HtmlNode> SubtextNodes { get; set; }
-        public List<HackerNewsStory> HackerNewsStories { get; set; }
-        public IHackerNewsSettings Settings { get; }
-        public IHackerNewsStoryItemValidator Validator { get; }
-        public IHackerNewsDataProvider DataProvider { get; }
-        public IHackerNewsDataParser Parser { get; }
+        private List<HtmlNode> _titleNodes;
+        private List<HtmlNode> _subtextNodes;
+        private List<HackerNewsStory> _hackerNewsStories;
+        private readonly IHackerNewsSettings _settings;
+        private readonly IHackerNewsStoryItemValidator _validator;
+        private readonly IHackerNewsDataProvider _dataProvider;
+        private readonly IHackerNewsDataParser _parser;
 
         public HackerNewsScraper(IHackerNewsSettings settings, IHackerNewsStoryItemValidator validator, 
             IHackerNewsDataProvider dataProvider, IHackerNewsDataParser parser)
         {
-            Settings = settings;
-            Validator = validator;
-            DataProvider = dataProvider;
-            Parser = parser;
+            _settings = settings;
+            _validator = validator;
+            _dataProvider = dataProvider;
+            _parser = parser;
         }
 
         /// <summary>
@@ -33,12 +33,12 @@ namespace HackerNewsWebScraper
         /// <returns></returns>
         public JArray Scrape(int noOfStoriesToGet)
         {
-            HackerNewsStories = new List<HackerNewsStory>();
+            _hackerNewsStories = new List<HackerNewsStory>();
             var pageNo = 1;
 
             GetDataFromPage(pageNo);
 
-            for (int i = 0; HackerNewsStories.Count < noOfStoriesToGet; i++)
+            for (int i = 0; _hackerNewsStories.Count < noOfStoriesToGet; i++)
             {
                 if (ShouldChangePage(i))
                 {
@@ -47,10 +47,10 @@ namespace HackerNewsWebScraper
                     i = 0; //reset index at start of new page
                 }
 
-                HackerNewsStories.Add(GetStoryData(TitleNodes[i], SubtextNodes[i]));
+                _hackerNewsStories.Add(GetStoryData(_titleNodes[i], _subtextNodes[i]));
             }
 
-            return JArray.Parse(JsonConvert.SerializeObject(HackerNewsStories));
+            return JArray.Parse(JsonConvert.SerializeObject(_hackerNewsStories));
         }
 
         /// <summary>
@@ -61,23 +61,23 @@ namespace HackerNewsWebScraper
         /// <returns></returns>
         private HackerNewsStory GetStoryData(HtmlNode titleItem, HtmlNode subtextItem)
         {
-            var title = Parser.GetTitle(titleItem);
-            title = Validator.IsTitleValid(title) ? title : Settings.TitleDefault;
+            var title = _parser.GetTitle(titleItem);
+            title = _validator.IsTitleValid(title) ? title : _settings.TitleDefault;
 
-            var uri = Parser.GetUri(titleItem);
-            uri = Validator.IsUriValid(uri) ? uri : Settings.UriDefault;
+            var uri = _parser.GetUri(titleItem);
+            uri = _validator.IsUriValid(uri) ? uri : _settings.UriDefault;
 
-            var author = Parser.GetAuthor(subtextItem);
-            author = Validator.IsAuthorValid(author) ? author : Settings.AuthorDefault;
+            var author = _parser.GetAuthor(subtextItem);
+            author = _validator.IsAuthorValid(author) ? author : _settings.AuthorDefault;
 
-            var comments = Parser.GetNumberOfComments(subtextItem);
-            comments = Validator.IsCommentsValid(comments) ? comments : Settings.CommentsDefault;
+            var comments = _parser.GetNumberOfComments(subtextItem);
+            comments = _validator.IsCommentsValid(comments) ? comments : _settings.CommentsDefault;
 
-            var points = Parser.GetNumberOfPoints(subtextItem);
-            points = Validator.IsPointsValid(points) ? points : Settings.PointsDefault;
+            var points = _parser.GetNumberOfPoints(subtextItem);
+            points = _validator.IsPointsValid(points) ? points : _settings.PointsDefault;
 
-            var rank = Parser.GetRank(titleItem);
-            rank = Validator.IsRankValid(rank) ? rank : Settings.RankDefault;
+            var rank = _parser.GetRank(titleItem);
+            rank = _validator.IsRankValid(rank) ? rank : _settings.RankDefault;
 
             return new HackerNewsStory(title, uri, author, points, comments, rank);
         }
@@ -89,7 +89,7 @@ namespace HackerNewsWebScraper
         /// <returns></returns>
         private bool ShouldChangePage(int itemNumber)
         {
-            return itemNumber >= TitleNodes.Count;
+            return itemNumber >= _titleNodes.Count;
         }
 
         /// <summary>
@@ -98,11 +98,11 @@ namespace HackerNewsWebScraper
         /// <param name="pageNumber"></param>
         private void GetDataFromPage(int pageNumber)
         {
-            var pageData = DataProvider.GetPageData(new Uri(HackerNewsConstants.HackerNewsUri +
+            var pageData = _dataProvider.GetPageData(new Uri(HackerNewsConstants.HackerNewsUri +
                                                     HackerNewsConstants.QueryString + pageNumber));
 
-            TitleNodes = DataProvider.GetTitleNodes(pageData);
-            SubtextNodes = DataProvider.GetSubtextNodes(pageData);
+            _titleNodes = _dataProvider.GetTitleNodes(pageData);
+            _subtextNodes = _dataProvider.GetSubtextNodes(pageData);
         }
 
     }

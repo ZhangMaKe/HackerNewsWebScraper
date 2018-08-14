@@ -7,11 +7,11 @@ namespace HackerNewsWebScraper
 {
     public class HackerNewsDataParser : IHackerNewsDataParser
     {
-        public IHackerNewsSettings Settings { get; }
+        private readonly IHackerNewsSettings _settings;
 
         public HackerNewsDataParser(IHackerNewsSettings settings)
         {
-            Settings = settings;
+            _settings = settings;
         }
         public HtmlNode GetStorylinkNode(HtmlNode titleNode)
         {
@@ -58,7 +58,7 @@ namespace HackerNewsWebScraper
 
             if (commentsNode is null)
             {
-                return Settings.CommentsDefault;
+                return _settings.CommentsDefault;
             }
 
             var commentText = commentsNode.InnerText;
@@ -66,7 +66,7 @@ namespace HackerNewsWebScraper
             if (!commentText.Contains("comment"))
             {
                 //number of comments not found, return default
-                return Settings.CommentsDefault;
+                return _settings.CommentsDefault;
             }
 
             var commentNumberText = commentText.Substring(0, commentText.IndexOf(HackerNewsConstants.CommentSeperatorChar));
@@ -74,7 +74,7 @@ namespace HackerNewsWebScraper
             //if the text can be parsed to a number, return the number, otherwise return the default from settings
             return int.TryParse(commentNumberText, out int numberOfComments)
                 ? numberOfComments
-                : Settings.CommentsDefault;
+                : _settings.CommentsDefault;
         }
 
         public int GetNumberOfPoints(HtmlNode subtextNode)
@@ -84,7 +84,7 @@ namespace HackerNewsWebScraper
             if (pointsNode is null)
             {
                 //points not found, use default
-                return Settings.PointsDefault;
+                return _settings.PointsDefault;
             }
 
             var pointsText = pointsNode.InnerText;
@@ -93,7 +93,7 @@ namespace HackerNewsWebScraper
             var pointsNumberText = pointsText.Substring(0, pointsText.IndexOf(HackerNewsConstants.PointsSeperatorChar));
 
             //if the text can be parsed to a number, return the number, otherwise return the default from settings
-            return int.TryParse(pointsNumberText, out int numberOfPoints) ? numberOfPoints : Settings.PointsDefault;
+            return int.TryParse(pointsNumberText, out int numberOfPoints) ? numberOfPoints : _settings.PointsDefault;
         }
 
         public int GetRank(HtmlNode titleNode)
@@ -103,7 +103,7 @@ namespace HackerNewsWebScraper
             if (rankNode is null)
             {
                 //rank not found, use default value
-                return Settings.RankDefault;
+                return _settings.RankDefault;
             }
 
             var rankText = rankNode.InnerText;
@@ -112,7 +112,7 @@ namespace HackerNewsWebScraper
             rankText = rankText.Substring(0, rankText.IndexOf(HackerNewsConstants.RankSeperatorChar));
 
             //if the text can be parsed to a number, return the number, otherwise return the default from settings
-            return int.TryParse(rankText, out int rankNumber) ? rankNumber : Settings.RankDefault;
+            return int.TryParse(rankText, out int rankNumber) ? rankNumber : _settings.RankDefault;
         }
     }
 }

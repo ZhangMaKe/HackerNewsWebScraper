@@ -4,7 +4,6 @@ namespace HackerNewsWebScraper.Interfaces
 {
     public interface IHackerNewsDataParser
     {
-        IHackerNewsSettings Settings { get; }
         /// <summary>
         /// Get Title from title element.
         /// </summary>

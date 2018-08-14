@@ -32,9 +32,9 @@ namespace HackerNewsWebScraper
                 return;
             }
 
-            if (noOfPosts < 0 || noOfPosts > scraper.Settings.MaxNumberOfPosts)
+            if (noOfPosts < 0 || noOfPosts > settings.MaxNumberOfPosts)
             {
-                Console.WriteLine("arguement must be positive integer and no larger than {0}", scraper.Settings.MaxNumberOfPosts);
+                Console.WriteLine("arguement must be positive integer and no larger than {0}", settings.MaxNumberOfPosts);
                 return;
             }
 
